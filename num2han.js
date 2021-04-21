@@ -9,7 +9,7 @@ function num2han(num) {
     pos = num.length;
     pos4 = Math.ceil(pos / 4);
     if (pos4 <= units4.length) {
-        for (var i in num) {
+        for (i in num) {
             han = hans[num[i]];
             pos = num.length - i;
             pos1 = pos % 4 || 4;
