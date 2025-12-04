@@ -27,14 +27,12 @@ var objectToFormData = function (obj, form, namespace) {
 function ajax(url, data, options) {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!options) options = {
-                headers: {
-                    'Accept': 'text/json'
-                }
-            }
+            if (!options) options = {}
+            if (!options.headers) options.headers = {}
+            if (!options.headers.Accept) options.headers.Accept = 'text/json'
             if (data) {
-                options.method = 'POST'
-                options.body = objectToFormData(data)
+                if (!options.method) options.method = 'POST'
+                options.body = objectToFormData(data, options.body)
             }
             const r = await fetch(url, options)
             try {
