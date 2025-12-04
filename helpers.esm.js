@@ -24,11 +24,14 @@ var objectToFormData = function (obj, form, namespace) {
     return fd;
 };
 
-// 반환값이 json이 아니면 텍스트 및 스크립트로 처리하며 실패로 간주.
-export default function (url, data) {
+function ajax(url, data, options) {
     return new Promise(async (resolve, reject) => {
         try {
-            const options = {}
+            if (!options) options = {
+                headers: {
+                    'Accept': 'text/json'
+                }
+            }
             if (data) {
                 options.method = 'POST'
                 options.body = objectToFormData(data)
@@ -38,6 +41,7 @@ export default function (url, data) {
                 const j = await r.clone().json()
                 resolve(j)
             } catch (e) {
+                // 반환값이 json이 아니면 텍스트 및 스크립트로 처리하며 실패로 간주.
                 const t = await r.text()
                 new DOMParser().parseFromString(t, 'text/html').body.querySelectorAll('script')
                     .forEach(s => eval(s.innerText))
@@ -48,3 +52,5 @@ export default function (url, data) {
         }
     })
 }
+
+export { objectToFormData, ajax }
